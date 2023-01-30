@@ -1,0 +1,24 @@
+{
+  "name": "k6",
+  "version": "1.0.0",
+  "description": "K6 tutorial for the pefromance testing workshop",
+  "main": "index.js",
+  "scripts": {
+    "test": "k6 run index.js --out influxdb=http://ec2-18-217-239-148.us-east-2.compute.amazonaws.com:8086/k6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TomashGombosh/performance-workshop.git"
+  },
+  "keywords": [
+    "k6.io",
+    "performance",
+    "javascript"
+  ],
+  "author": "Tomash Gombosh",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/TomashGombosh/performance-workshop/issues"
+  },
+  "homepage": "https://github.com/TomashGombosh/performance-workshop#readme"
+}
