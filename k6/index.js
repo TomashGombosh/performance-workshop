@@ -3,8 +3,6 @@ import { check } from "k6";
 import { Trend } from "k6/metrics";
 const TARGET_API = "https://api-dev.buy-it.afj-solution.com/api/v1"
 const trends = new Trend("trends");
-let token;
-
 export const options = {
   stages: [
     { duration: '10s', target: 10 },
@@ -24,16 +22,17 @@ export function setup() {
     password: "Test123$"
   };
   const tokenResponse = http.post(`${TARGET_API}/login`, JSON.stringify(loginRequest), loginParams);
-  token = JSON.parse(tokenResponse.body).token;
+  const token = JSON.parse(tokenResponse.body).token;
+  return token;
 }
 
-export default function () {
+export default function (token) {
   const params = {
     headers: {
       Authorization: `Bearer ${token}`
     }
   }
-  const categoriesResponse = http.get(`${TARGET_API}/localize`, params);
+  const categoriesResponse = http.get(`${TARGET_API}/products`, params);
   check(categoriesResponse, { "status was 200": (r) => r.status === 200 });
   trends.add(categoriesResponse.timings.sending + categoriesResponse.timings.receiving);
 }

@@ -5,6 +5,7 @@ class QuickstartUser(HttpUser):
     wait_time = between(1, 2)
 
     token = ""
+    id = ""
 
     def on_start(self):
         resp = self.client.post(
@@ -15,5 +16,5 @@ class QuickstartUser(HttpUser):
     @task
     def test(self):
         self.client.headers['Content-Type'] = "application/json"
-        self.client.headers['Authorization'] = "Bearer" + self.token
-        self.client.get("/localize")
+        self.client.headers['Authorization'] = "Bearer " + self.token
+        self.client.get("/category")
