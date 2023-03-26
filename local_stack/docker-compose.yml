@@ -1,0 +1,50 @@
+version: "3.4"
+services:
+  grafana:
+    container_name: Grafana
+    image: grafana/grafana
+    ports:
+      - "3000:3000/tcp"
+    networks:
+      local_stack:
+        ipv4_address: 172.168.48.22
+    depends_on:
+      - influx_db
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
+    volumes:
+      - ./dashboards:/var/lib/grafana/dashboards
+      - ./grafana-dashboard.yaml:/etc/grafana/provisioning/dashboards/dashboard.yaml
+      - ./grafana-datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+
+  influx_db:
+    container_name: InfluxDB
+    image: influxdb:1.8
+    ports:
+      - "8086:8086/tcp"
+    networks:
+      local_stack:
+        ipv4_address: 172.168.48.21
+    volumes:
+      - local_stack:/var/lib/influxdb2:rw
+    environment:
+      - INFLUXDB_DB=k6
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
+
+volumes:
+  local_stack:
+
+networks:
+  local_stack:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.168.48.0/16
+          gateway: 172.168.48.1
