@@ -3,18 +3,19 @@ import { check } from "k6";
 import { Trend } from "k6/metrics";
 const TARGET_API = "https://api-dev.buy-it.afj-solution.com/api/v1"
 const trends = new Trend("trends");
-
-//** 300 users shopping by 120secons */
-// 300/10 30
-// 120/3  20 < WT < 90 
+/*
+ Target 2000, for 600 seconds
+ Warm up -> users from 10 to 20 by 40s
+ Stress test -> users from 20 to 200 by 120s N*1.5
+ Cold up -> users from 200 to 10 by 120s
+*/
 export const options = {
-  startVUs: 15,
-  rate: 3,
+  rate: 20,
+  startVUs: 100,
   stages: [
-    { duration: '40s', target: 30 },
-    { duration: '2m', target: 300 },
-    { duration: '1m', target: 15  },
-    { duration: '1m', target: 300 }
+    { duration: '40s', target: 1000 },
+    { duration: '2m', target: 3000 },
+    { duration: '1m', target: 1000 },
   ],
 };
 
@@ -40,7 +41,7 @@ export default function (token) {
       Authorization: `Bearer ${token}`
     }
   }
-  const categoriesResponse = http.get(`${TARGET_API}/products`, params);
+  const categoriesResponse = http.get(`${TARGET_API}/localize`, params);
   check(categoriesResponse, { "status was 200": (r) => r.status === 200 });
   trends.add(categoriesResponse.timings.sending + categoriesResponse.timings.receiving);
 }
