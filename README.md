@@ -29,3 +29,9 @@ You can use default K6 dashboad to view the results (Dashboard > Browse > Enter 
 ### Start performance test with local monitoring
 
 - To run perfromance test run `npm run test-local_stack`
+
+
+## Notes
+
+1. UI for the test website is: https://dev.buy-it.afj-solution.com/
+2. To obtain credentials please use Registration form - https://dev.buy-it.afj-solution.com/registration
